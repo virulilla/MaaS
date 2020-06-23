@@ -27,15 +27,15 @@ def crearGDBfinal_function(path):
 
     xml = os.path.join(path, "Schema.xml")
 
-    arcpy.ExportXMLWorkspaceDocument_management(gdb + "//ds",xml, "SCHEMA_ONLY")
+    arcpy.ExportXMLWorkspaceDocument_management(gdb, xml, "SCHEMA_ONLY")
 
-    #Creamos una GDB nueva vacia y le importamos el esquema de la GDB anterior
+    # #Creamos una GDB nueva vacia y le importamos el esquema de la GDB anterior
     gdbFINAL = os.path.join(path, "LineasEMT_PRE.gdb")
     if arcpy.Exists(gdbFINAL):
         arcpy.Delete_management(gdbFINAL)
-    arcpy.CreateFileGDB_management(path, "LineasEMT_PRE.gdb")
+    arcpy.CreateFileGDB_management(path, "LineasEMT_PRE.gdb", "10.0")
 
-    arcpy.ImportXMLWorkspaceDocument_management(gdbFINAL,xml,"SCHEMA_ONLY")
+    arcpy.ImportXMLWorkspaceDocument_management(gdbFINAL, xml, "SCHEMA_ONLY")
 
     #Importamos los datos a las nueva GDB
 
