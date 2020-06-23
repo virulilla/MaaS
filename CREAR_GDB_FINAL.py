@@ -33,7 +33,7 @@ def crearGDBfinal_function(path):
     gdbFINAL = os.path.join(path, "LineasEMT_PRE.gdb")
     if arcpy.Exists(gdbFINAL):
         arcpy.Delete_management(gdbFINAL)
-    arcpy.CreateFileGDB_management(path, "LineasEMT_PRE.gdb", "10.0")
+    arcpy.CreateFileGDB_management(path, "LineasEMT_PRE.gdb")
 
     arcpy.ImportXMLWorkspaceDocument_management(gdbFINAL, xml, "SCHEMA_ONLY")
 

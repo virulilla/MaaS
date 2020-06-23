@@ -8,47 +8,42 @@
 # Copyright:   (c) sykgis 2020
 # Licence:     <your licence>
 #-------------------------------------------------------------------------------
-import arcpy, os
+import arcpy, os, time
 from datetime import time, datetime
 
-def BuildNetwork_function(data):
-    arcpy.na.BuildNetwork(data)
-    return True
 
-# def build_function(path):
+def build_function(path):
 
-path = "C:/SyK/05_MaaS_concat/data"
-gdb = os.path.join(path, "LineasEMT_PRE.gdb")
-arcpy.env.workspace = gdb
+    path = "C:/SyK/05_MaaS_concat/data"
+    gdb = os.path.join(path, "LineasEMT_PRE.gdb")
+    arcpy.env.workspace = gdb
 
-arcpy.CheckOutExtension("Network")
-inNetworkDataset = "/ds/ds_ND"
+    arcpy.CheckOutExtension("Network")
+    inNetworkDataset = "/ds/ds_ND"
 
-#Construimos la red. Si se ha cambiado la geometria, tardara unos 30 minutos. Sino es casi automatico
-arcpy.na.BuildNetwork(inNetworkDataset)
-# flag = False
-# semaphore = False
-# while flag == False:
-#     print flag
-#     if semaphore == False:
-#         semaphore = True
-#         flag = BuildNetwork_function(inNetworkDataset)
-
-#Backup de la GDB anterior
-# hoy = time.strftime("%Y%m%d_%H%M%S")
-hoy = datetime.now().strftime("%Y%m%d_%H%M%S")
-#print hoy
-in_data =  os.path.join(path, "LineasEMT_PRO.gdb")
-#print in_data
-out_data = os.path.join(path, "LineasEMT_PRO"+"_"+ hoy +".gdb")
-#print out_data
-os.rename(in_data, out_data)
+    #Construimos la red. Si se ha cambiado la geometria, tardara unos 30 minutos. Sino es casi automatico
+    if arcpy.Exists(gdb):
+        arcpy.na.BuildNetwork(inNetworkDataset)
 
 
-#ahora, renombramos la GDB que hemos contruido en el proceso para pasarla a produccion
-in_data1 =  os.path.join(path, "LineasEMT_PRE.gdb")
-out_data1 = os.path.join(path, "LineasEMT_PRO.gdb")
-os.rename(in_data1, out_data1)
+    #Backup de la GDB anterior
+    # hoy = time.strftime("%Y%m%d_%H%M%S")
+    hoy = datetime.now().strftime("%Y%m%d_%H%M%S")
+    #print hoy
+    in_data =  os.path.join(path, "LineasEMT_PRO.gdb")
+    #print in_data
+    out_data = os.path.join(path, "LineasEMT_PRO"+"_"+ hoy +".gdb")
+    #print out_data
+    if arcpy.Exists(in_data):
+        os.rename(in_data, out_data)
 
-print "fin"
+    time.sleep(300)
+
+    #ahora, renombramos la GDB que hemos contruido en el proceso para pasarla a produccion
+    in_data1 =  os.path.join(path, "LineasEMT_PRE.gdb")
+    out_data1 = os.path.join(path, "LineasEMT_PRO.gdb")
+    if arcpy.Exists(in_data1):
+        os.rename(in_data1, out_data1)
+
+    print "fin"
 
