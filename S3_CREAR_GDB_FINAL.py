@@ -33,7 +33,7 @@ if arcpy.Exists(gdbFINAL):
     arcpy.Delete_management(gdbFINAL)
 arcpy.CreateFileGDB_management(path, "LineasEMT_PRE.gdb")
 
-arcpy.ImportXMLWorkspaceDocument_management(gdbFINAL, xml, "SCHEMA_ONLY")
+# arcpy.ImportXMLWorkspaceDocument_management(gdbFINAL, xml, "SCHEMA_ONLY")
 
 #Importamos los datos a las nueva GDB
 

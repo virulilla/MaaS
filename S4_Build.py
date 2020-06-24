@@ -9,7 +9,8 @@
 # Licence:     <your licence>
 #-------------------------------------------------------------------------------
 import arcpy, os, time
-from datetime import time, datetime
+# from datetime import time, datetime
+import time
 
 path = "C:/SyK/05_MaaS_concat/data"
 gdb = os.path.join(path, "LineasEMT_PRE.gdb")
@@ -22,8 +23,7 @@ inNetworkDataset = "/ds/ds_ND"
 arcpy.na.BuildNetwork(inNetworkDataset)
 
 #Backup de la GDB anterior
-# hoy = time.strftime("%Y%m%d_%H%M%S")
-hoy = datetime.now().strftime("%Y%m%d_%H%M%S")
+hoy = time.strftime("%Y%m%d_%H%M%S")
 #print hoy
 in_data =  os.path.join(path, "LineasEMT_PRO.gdb")
 #print in_data
@@ -31,7 +31,7 @@ out_data = os.path.join(path, "LineasEMT_PRO"+"_"+ hoy +".gdb")
 #print out_data
 os.rename(in_data, out_data)
 
-time.sleep(300)
+time.sleep(1800)
 
 #ahora, renombramos la GDB que hemos contruido en el proceso para pasarla a produccion
 in_data1 =  os.path.join(path, "LineasEMT_PRE.gdb")
