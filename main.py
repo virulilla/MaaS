@@ -1,5 +1,5 @@
 import arcpy
-import LineasEMT, GenerarInfoVelEMT, CREAR_GDB_FINAL, Build
+import S1_LineasEMT, S2_GenerarInfoVelEMT, S3_CREAR_GDB_FINAL, S4_Build
 
 flag = 0
 path_data = "C://SyK//05_MaaS_concat//data"
@@ -7,10 +7,10 @@ path_WGS84gdb = "C://SyK//05_MaaS_concat//data//LineasEMT_WGS84.gdb"
 path_FICH_VELOCIDADES = "C://SyK//05_MaaS_concat//data//velocidades_emt.info"
 
 if flag == 0:
-    flag = LineasEMT.LineasEMT_function(path_data)
+    flag = S1_LineasEMT.LineasEMT_function(path_data)
 elif flag == 1:
-    flag = GenerarInfoVelEMT.generarInfoVelEMT_function(path_WGS84gdb, path_FICH_VELOCIDADES)
+    flag = S2_GenerarInfoVelEMT.generarInfoVelEMT_function(path_WGS84gdb, path_FICH_VELOCIDADES)
 elif flag == 2:
-    flag = CREAR_GDB_FINAL.crearGDBfinal_function(path_data)
+    flag = S3_CREAR_GDB_FINAL.crearGDBfinal_function(path_data)
 elif flag == 3:
-    Build.build_function(path_data)
+    S4_Build.build_function(path_data)

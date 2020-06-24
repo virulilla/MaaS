@@ -7,8 +7,9 @@ import datetime
 import time
 import os
 
-##path = "D:/Proyecto/ESRI001_MAASEMT2019/Datos/Script/Proceso"
-##FILE_GDB=os.path.join(path, "LineasEMT_WGS84.gdb")
+path = "C://SyK//05_MaaS_concat//data"
+FILE_GDB=os.path.join(path, "LineasEMT_WGS84.gdb")
+FICH_VELOCIDADES = "C://SyK//05_MaaS_concat//data//velocidades_emt.info"
 
 def ObtenerNumFranjas(FILE_GDB):
     numFranjas = 0
@@ -22,52 +23,52 @@ def ObtenerNumFranjas(FILE_GDB):
     return numFranjas/2
 
 
-def generarInfoVelEMT_function(FILE_GDB, FICH_VELOCIDADES):
-    numFranjas = ObtenerNumFranjas(FILE_GDB)
-    print('Numero franjas = ' + str(numFranjas))
-    aCampos = ["LINEA"]
-    nombreCampo = ""
-    for d in range(7):
-        kk = 0
-        for f in range(numFranjas):
-            nombreCampo = "D" + str(d+1) + "F" + str(f+1) + "HORAS"
-            aCampos.append(nombreCampo)
-            nombreCampo = "D" + str(d+1) + "F" + str(f+1) + "VEL"
-            aCampos.append(nombreCampo)
 
-    ficheroVelocidades = open(FICH_VELOCIDADES,'w')
-    nroCampos = len(aCampos)
-    lineaAct = None
-    lineaAnt = None
-    diaAct = None
-    diaAnt = None
+numFranjas = ObtenerNumFranjas(FILE_GDB)
+print('Numero franjas = ' + str(numFranjas))
+aCampos = ["LINEA"]
+nombreCampo = ""
+for d in range(7):
+    kk = 0
+    for f in range(numFranjas):
+        nombreCampo = "D" + str(d+1) + "F" + str(f+1) + "HORAS"
+        aCampos.append(nombreCampo)
+        nombreCampo = "D" + str(d+1) + "F" + str(f+1) + "VEL"
+        aCampos.append(nombreCampo)
 
-    cursorSearch = arcpy.da.SearchCursor(FILE_GDB+'/bus_lines', aCampos, sql_clause=(None, "ORDER BY LINEA ASC"))
-    for fila in cursorSearch:
-        lineaAct = fila[0]
-        if lineaAct != lineaAnt:
-            lineaAnt = lineaAct
-            filaStr = ""
-            diaAnt = None
-            for indCampo in range(nroCampos):
-                if indCampo > 0:
-                    diaAct = aCampos[indCampo][1:2]
-                    if diaAnt == None:
-                        diaAnt = diaAct
+ficheroVelocidades = open(FICH_VELOCIDADES,'w')
+nroCampos = len(aCampos)
+lineaAct = None
+lineaAnt = None
+diaAct = None
+diaAnt = None
 
-                    if (diaAct != diaAnt) or (indCampo == nroCampos - 1):
-                        if (indCampo == nroCampos - 1):
-                            filaStr = filaStr + str(fila[indCampo]) + " "
-                        ficheroVelocidades.write(filaStr[:-1] + '\n')
-                        #ficheroVelocidades.flush()
-                        filaStr = str(lineaAct) + ','
-                    filaStr = filaStr + str(fila[indCampo])
-                    if diaAct != diaAnt:
-                        diaAnt = diaAct
-                    if diaAct == diaAnt:
-                        filaStr = filaStr + ','
-                else:
-                    filaStr = filaStr + str(fila[indCampo]) + ','
+cursorSearch = arcpy.da.SearchCursor(FILE_GDB+'/bus_lines', aCampos, sql_clause=(None, "ORDER BY LINEA ASC"))
+for fila in cursorSearch:
+    lineaAct = fila[0]
+    if lineaAct != lineaAnt:
+        lineaAnt = lineaAct
+        filaStr = ""
+        diaAnt = None
+        for indCampo in range(nroCampos):
+            if indCampo > 0:
+                diaAct = aCampos[indCampo][1:2]
+                if diaAnt == None:
+                    diaAnt = diaAct
 
-    ficheroVelocidades.close()
-    return 2
+                if (diaAct != diaAnt) or (indCampo == nroCampos - 1):
+                    if (indCampo == nroCampos - 1):
+                        filaStr = filaStr + str(fila[indCampo]) + " "
+                    ficheroVelocidades.write(filaStr[:-1] + '\n')
+                    #ficheroVelocidades.flush()
+                    filaStr = str(lineaAct) + ','
+                filaStr = filaStr + str(fila[indCampo])
+                if diaAct != diaAnt:
+                    diaAnt = diaAct
+                if diaAct == diaAnt:
+                    filaStr = filaStr + ','
+            else:
+                filaStr = filaStr + str(fila[indCampo]) + ','
+
+ficheroVelocidades.close()
+execfile(os.path.join("C://SyK//05_MaaS_concat//MaaS.git//S3_CREAR_GDB_FINAL.py"))
