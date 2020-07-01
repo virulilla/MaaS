@@ -13,6 +13,8 @@ outNALayer_lyr = os.path.join(path, "Route.lyr")
 arcpy.env.workspace = os.path.join(path, gdb, "ds")
 arcpy.env.overwriteOutput = True
 
+print "inicio Solve"
+
 if arcpy.CheckExtension("network") == "Available":
     arcpy.CheckOutExtension("network")
 else:
@@ -36,8 +38,11 @@ arcpy.MakeTableView_management(stopsShp, "stops_view")
 # Se añaden las localizaciones
 arcpy.na.AddLocations(outNALayer, stopsLayerName, "stops_view", "", tolerance)
 
-# Se soluciona la ruta
-arcpy.na.Solve(outNALayer)
-
-# Se almacena en disco el resultado del calculo ruta
-arcpy.management.SaveToLayerFile(outNALayer, outNALayer_lyr)
+# El solucionador de rutas devuelve la layer y un solve_succed (Booleano que indica si la solucion fue correcta o no)
+# Este ultimo parametro es el que se evalua en el condicional
+# Si el resultado es satisfactorio el resultado del calculo se guarda en una archivo lyr
+# Si no, se muestra un mensaje de error
+if arcpy.na.Solve(outNALayer):
+    arcpy.management.SaveToLayerFile(outNALayer, outNALayer_lyr)
+else:
+    print "Fallo el solucionador de rutas"
