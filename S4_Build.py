@@ -38,7 +38,7 @@ arcpy.na.BuildNetwork(inNetworkDataset)
 # out_data1 = os.path.join(path, "LineasEMT_PRO.gdb")
 # os.rename(in_data1, out_data1)
 
-execfile(os.path.join("C://SyK//05_MaaS_concat//MaaS.git//S5_Solve.py"))
-
 print "fin"
+
+execfile(os.path.join("C://SyK//05_MaaS_concat//MaaS.git//S5_Solve.py"))
 
